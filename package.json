@@ -1,0 +1,13 @@
+{
+  "name": "mascote-live",
+  "version": "1.0.0",
+  "description": "Mascote virtual 2D",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  }
+}
