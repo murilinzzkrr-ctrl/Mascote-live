@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mascote Live</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #171326;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+h2 { color: #ffb8d2; }
+
+.scene {
+  text-align: center;
+}
+
+.mascote {
+  font-size: 125px;
+  display: inline-block;
+  animation: flutuar 2s infinite ease-in-out;
+  filter: drop-shadow(0 10px 15px #ff91bd55);
+}
+
+@keyframes flutuar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-18px); }
+}
+
+.pular {
+  animation: pular .7s ease-in-out;
+}
+
+@keyframes pular {
+  0%, 100% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-65px) scale(1.15); }
+}
+
+#mensagem {
+  color: #ffc2dc;
+  min-height: 30px;
+  font-size: 18px;
+}
+
+button {
+  border: 0;
+  border-radius: 20px;
+  padding: 13px 22px;
+  margin: 8px;
+  background: #ff80b5;
+  color: #291326;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.status {
+  color: #a9e6bb;
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="scene">
+  <h2>🌸 Meu Mascote Live 🌸</h2>
+
+  <div id="mascote" class="mascote">🐰</div>
+
+  <p id="mensagem">Oi! Vamos brincar? 💗</p>
+
+  <p class="status" id="status">Conectando...</p>
+
+  <button onclick="testarRosa()">🌹 Testar rosa</button>
+  <button onclick="dancar()">💃 Dançar</button>
+</div>
+
+<script>
+const mascote = document.getElementById("mascote");
+const mensagem = document.getElementById("mensagem");
+const status = document.getElementById("status");
+
+function testarRosa() {
+  reagir("Rosa", "Visitante");
+}
+
+function reagir(presente, usuario) {
+  mensagem.textContent = usuario + " enviou " + presente + "! 💗";
+
+  mascote.classList.remove("pular");
+  void mascote.offsetWidth;
+  mascote.classList.add("pular");
+
+  setTimeout(() => {
+    mascote.classList.remove("pular");
+    mensagem.textContent = "Obrigado pelo carinho! 🌸";
+  }, 1200);
+}
+
+function dancar() {
+  mensagem.textContent = "Olha minha dança! 💃";
+  mascote.textContent = "🐻";
+
+  setTimeout(() => {
+    mascote.textContent = "🐰";
+    mensagem.textContent = "Que divertido! 💗";
+  }, 1500);
+}
+
+function conectar() {
+  const protocolo = location.protocol === "https:" ? "wss:" : "ws:";
+  const ws = new WebSocket(protocolo + "//" + location.host);
+
+  ws.onopen = () => {
+    status.textContent = "🟢 Conectado ao servidor";
+  };
+
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+
+    if (data.type === "GIFT") {
+      reagir(data.giftName, data.user);
+    }
+  };
+
+  ws.onclose = () => {
+    status.textContent = "🔴 Reconectando...";
+    setTimeout(conectar, 3000);
+  };
+}
+
+if (location.host) conectar();
+</script>
+
+</body>
+</html>
