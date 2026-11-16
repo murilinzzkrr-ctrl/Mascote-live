@@ -1,0 +1,27 @@
+{
+
+  "name": "mascote-live",
+
+  "version": "1.0.0",
+
+  "description": "Mascote virtual 2D com animações e interações",
+
+  "main": "index.js",
+
+  "scripts": {
+
+    "start": "node index.js"
+
+  },
+
+  "dependencies": {
+
+    "express": "^4.21.2",
+
+    "ws": "^8.18.0",
+
+    "tiktok-live-connector": "^2.1.0"
+
+  }
+
+}
